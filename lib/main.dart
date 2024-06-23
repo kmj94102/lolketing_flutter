@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lolketing_flutter/custom/custom_button.dart';
+import 'package:lolketing_flutter/custom/custom_text_field.dart';
+import 'package:lolketing_flutter/util/common.dart';
 import 'package:lolketing_flutter/style/color.dart';
 
 void main() {
@@ -30,14 +33,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,63 +40,92 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration:
-              const BoxDecoration(color: Color.fromARGB(255, 23, 24, 29)),
+          decoration: const BoxDecoration(color: ColorStyle.black),
           child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
+            padding: const EdgeInsets.only(left: 30, right: 30),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  height: 98,
+                Image.asset(
+                  '$imagesAddress/img_lolketing_logo.png',
                   width: 188,
-                  decoration: const BoxDecoration(color: Colors.cyan),
+                  height: 98,
                 ),
                 const SizedBox(
                   height: 70,
                 ),
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: '아이디를 입력해주세요',
-                    hintStyle: TextStyle(color: ColorStyle.gray),
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: ColorStyle.white), borderRadius: BorderRadius.all(Radius.circular(3))),
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: ColorStyle.gray), borderRadius: BorderRadius.all(Radius.circular(3))),
-
-                  ),
-                  onChanged: (text) {
-
-                  },
-                ),
+                CustomTextField(hintText: '아이디를 입력해주세요', onChanged: (text) {}),
                 const SizedBox(
                   height: 15,
                 ),
-                TextField(
-                  decoration: const InputDecoration(
-                    hintText: '비밀번호를 입력해주세요',
-                    hintStyle: TextStyle(color: ColorStyle.gray),
-                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: ColorStyle.white), borderRadius: BorderRadius.all(Radius.circular(3))),
-                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: ColorStyle.gray), borderRadius: BorderRadius.all(Radius.circular(3))),
-
-                  ),
-                  onChanged: (text) {
-
-                  },
-                ),
+                CustomTextField(hintText: '비밀번호를 입력해주세요', onChanged: (text) {}),
                 const SizedBox(
                   height: 15,
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                        primary: ColorStyle.white,
-                        backgroundColor: ColorStyle.mainColor,
-                        textStyle: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                    child: const Text('로그인'),
+                  child: CustomButton(
+                    text: '로그인',
+                    onClick: () {},
                   ),
-                )
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 22, bottom: 22),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text(
+                        '비밀번호 찾기',
+                        style: TextStyle(
+                            color: ColorStyle.mainColor, fontSize: 16),
+                      ),
+                      Text(
+                        '회원가입',
+                        style: TextStyle(
+                            color: ColorStyle.mainColor, fontSize: 16),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 1,
+                  color: ColorStyle.lightGray,
+                ),
+                const SizedBox(height: 15,),
+                MaterialButton(
+                  onPressed: (){},
+                  color: const Color.fromARGB(255, 3, 199, 90),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8, bottom: 8),
+                        child: Image.asset('$imagesAddress/img_logo_naver.png', width: 40, height: 40,),
+                      ),
+                      const Spacer(),
+                      const Text('네이버 로그인', style: TextStyle(color: ColorStyle.white, fontSize: 20, fontWeight: FontWeight.bold),),
+                      const Spacer(),
+                      const SizedBox(width: 40,)
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 15,),
+                MaterialButton(
+                  onPressed: (){},
+                  color: const Color.fromARGB(255, 254, 229, 0),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8, bottom: 8),
+                        child: Image.asset('$imagesAddress/img_logo_kakao.png', width: 40, height: 40,),
+                      ),
+                      const Spacer(),
+                      const Text('카카오 로그인', style: TextStyle(color: ColorStyle.black, fontSize: 20, fontWeight: FontWeight.bold),),
+                      const Spacer(),
+                      const SizedBox(width: 40,)
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
