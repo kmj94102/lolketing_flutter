@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lolketing_flutter/custom/custom_button.dart';
 import 'package:lolketing_flutter/custom/custom_text_field.dart';
+import 'package:lolketing_flutter/model/login.dart';
+import 'package:lolketing_flutter/network/auth.dart';
 import 'package:lolketing_flutter/util/common.dart';
 import 'package:lolketing_flutter/style/color.dart';
 
@@ -33,6 +35,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  void login() async {
+    await AuthNetworkUtil().emailLogin(const LoginInfo(id: '', password: ''));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +73,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: MediaQuery.of(context).size.width,
                   child: CustomButton(
                     text: '로그인',
-                    onClick: () {},
+                    onClick: () {
+                      login();
+                    },
                   ),
                 ),
                 Padding(
