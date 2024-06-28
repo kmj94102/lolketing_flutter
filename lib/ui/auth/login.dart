@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lolketing_flutter/custom/custom_button.dart';
 import 'package:lolketing_flutter/custom/custom_text_field.dart';
 import 'package:lolketing_flutter/database/auth_database.dart';
-import 'package:lolketing_flutter/model/login.dart';
-import 'package:lolketing_flutter/network/auth.dart';
+import 'package:lolketing_flutter/model/login_model.dart';
+import 'package:lolketing_flutter/network/auth_service.dart';
+import 'package:lolketing_flutter/ui/auth/join.dart';
 import 'package:lolketing_flutter/util/common.dart';
 import 'package:lolketing_flutter/style/color.dart';
 
@@ -19,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   var info = LoginInfo();
 
   void login() async {
-    var result = await AuthNetworkUtil().emailLogin(info);
+    var result = await AuthService().emailLogin(info);
     databaseClient.insertLoginInfo(result);
   }
 
@@ -46,19 +48,24 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 CustomTextField(
                     hintText: '아이디를 입력해주세요',
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    icon: SvgPicture.asset('$imagesAddress/ic_user.svg',
+                        fit: BoxFit.contain),
                     onChanged: (text) {
                       info.id = text;
-                    }
-                ),
+                    }),
                 const SizedBox(
                   height: 15,
                 ),
                 CustomTextField(
                     hintText: '비밀번호를 입력해주세요',
+                    isPassword: true,
+                    icon: SvgPicture.asset('$imagesAddress/ic_password.svg',
+                        fit: BoxFit.contain),
                     onChanged: (text) {
                       info.password = text;
-                    }
-                ),
+                    }),
                 const SizedBox(
                   height: 15,
                 ),
@@ -75,17 +82,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.only(top: 22, bottom: 22),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text(
+                    children: [
+                      const Text(
                         '비밀번호 찾기',
                         style: TextStyle(
                             color: ColorStyle.mainColor, fontSize: 16),
                       ),
-                      Text(
-                        '회원가입',
-                        style: TextStyle(
-                            color: ColorStyle.mainColor, fontSize: 16),
-                      )
+                      GestureDetector(
+                        child: const Text(
+                          '회원가입',
+                          style: TextStyle(
+                              color: ColorStyle.mainColor, fontSize: 16),
+                        ),
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return const JoinScreen();
+                          }));
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -94,37 +109,65 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 1,
                   color: ColorStyle.lightGray,
                 ),
-                const SizedBox(height: 15,),
+                const SizedBox(
+                  height: 15,
+                ),
                 MaterialButton(
-                  onPressed: (){},
+                  onPressed: () {},
                   color: const Color.fromARGB(255, 3, 199, 90),
                   child: Row(
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 8, bottom: 8),
-                        child: Image.asset('$imagesAddress/img_logo_naver.png', width: 40, height: 40,),
+                        child: Image.asset(
+                          '$imagesAddress/img_logo_naver.png',
+                          width: 40,
+                          height: 40,
+                        ),
                       ),
                       const Spacer(),
-                      const Text('네이버 로그인', style: TextStyle(color: ColorStyle.white, fontSize: 20, fontWeight: FontWeight.bold),),
+                      const Text(
+                        '네이버 로그인',
+                        style: TextStyle(
+                            color: ColorStyle.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
                       const Spacer(),
-                      const SizedBox(width: 40,)
+                      const SizedBox(
+                        width: 40,
+                      )
                     ],
                   ),
                 ),
-                const SizedBox(height: 15,),
+                const SizedBox(
+                  height: 15,
+                ),
                 MaterialButton(
-                  onPressed: (){},
+                  onPressed: () {},
                   color: const Color.fromARGB(255, 254, 229, 0),
                   child: Row(
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 8, bottom: 8),
-                        child: Image.asset('$imagesAddress/img_logo_kakao.png', width: 40, height: 40,),
+                        child: Image.asset(
+                          '$imagesAddress/img_logo_kakao.png',
+                          width: 40,
+                          height: 40,
+                        ),
                       ),
                       const Spacer(),
-                      const Text('카카오 로그인', style: TextStyle(color: ColorStyle.black, fontSize: 20, fontWeight: FontWeight.bold),),
+                      const Text(
+                        '카카오 로그인',
+                        style: TextStyle(
+                            color: ColorStyle.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
                       const Spacer(),
-                      const SizedBox(width: 40,)
+                      const SizedBox(
+                        width: 40,
+                      )
                     ],
                   ),
                 ),

@@ -1,5 +1,5 @@
 import 'package:lolketing_flutter/database/database_helper.dart';
-import 'package:lolketing_flutter/model/login.dart';
+import 'package:lolketing_flutter/model/login_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AuthDatabase {

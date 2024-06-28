@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:lolketing_flutter/model/login.dart';
+import 'package:lolketing_flutter/model/login_model.dart';
 import 'package:lolketing_flutter/util/common.dart';
 
-class AuthNetworkUtil {
+class AuthService {
   Future<LoginResult> emailLogin(LoginInfo info) async {
     var url = '$baseUrl/user/login/email';
     http.Response response = await http.post(
