@@ -12,20 +12,23 @@ class CustomTextField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final TextInputType? keyboardType;
   final Function()? onTap;
+  final Function(String)? onSubmitted;
   final TextEditingController? controller;
 
-  const CustomTextField({Key? key,
-    required this.hintText,
-    required this.onChanged,
-    this.icon,
-    this.enable = true,
-    this.isPassword = false,
-    this.maxLength = 100,
-    this.maxLine = 1,
-    this.onTap,
-    this.textInputAction,
-    this.keyboardType,
-    this.controller})
+  const CustomTextField(
+      {Key? key,
+      required this.hintText,
+      required this.onChanged,
+      this.icon,
+      this.enable = true,
+      this.isPassword = false,
+      this.maxLength = 100,
+      this.maxLine = 1,
+      this.onTap,
+      this.onSubmitted,
+      this.textInputAction,
+      this.keyboardType,
+      this.controller})
       : super(key: key);
 
   @override
@@ -36,8 +39,9 @@ class CustomTextField extends StatelessWidget {
         textInputAction: textInputAction,
         keyboardType: keyboardType,
         obscureText: isPassword,
-        maxLength:11,
+        maxLength: maxLength,
         decoration: InputDecoration(
+          counterText: '',
           hintText: hintText,
           hintStyle: const TextStyle(color: ColorStyle.gray),
           enabledBorder: const OutlineInputBorder(
@@ -52,20 +56,21 @@ class CustomTextField extends StatelessWidget {
           prefixIcon: icon == null
               ? null
               : Container(
-            width: 24,
-            height: 24,
-            padding: const EdgeInsets.all(8),
-            child: icon,
-          ),
+                  width: 24,
+                  height: 24,
+                  padding: const EdgeInsets.all(12),
+                  child: icon,
+                ),
         ),
         style: const TextStyle(color: ColorStyle.white),
         onChanged: onChanged,
+        onSubmitted: onSubmitted,
         enabled: enable,
       ),
       Positioned.fill(
           child: GestureDetector(
-            onTap: onTap,
-          ))
+        onTap: onTap,
+      ))
     ]);
   }
 }

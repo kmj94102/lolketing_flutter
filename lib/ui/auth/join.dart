@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lolketing_flutter/custom/custom_button.dart';
 import 'package:lolketing_flutter/custom/custom_text_field.dart';
+import 'package:lolketing_flutter/model/login_model.dart';
+import 'package:lolketing_flutter/ui/auth/search_address.dart';
 
+import '../../network/auth_service.dart';
 import '../../style/color.dart';
 import '../../util/common.dart';
 
@@ -14,6 +17,9 @@ class JoinScreen extends StatefulWidget {
 }
 
 class _JoinScreenState extends State<JoinScreen> {
+  final joinInfo = JoinInfo(type: 'email');
+  final addressController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,12 +31,17 @@ class _JoinScreenState extends State<JoinScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 16, left: 20),
-                child: SvgPicture.asset(
-                  '$imagesAddress/ic_arrow_left.svg',
-                  width: 24,
-                  height: 24,
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16, left: 20),
+                  child: SvgPicture.asset(
+                    '$imagesAddress/ic_arrow_left.svg',
+                    width: 24,
+                    height: 24,
+                  ),
                 ),
               ),
               Expanded(
@@ -54,7 +65,9 @@ class _JoinScreenState extends State<JoinScreen> {
                             icon: SvgPicture.asset('$imagesAddress/ic_user.svg',
                                 fit: BoxFit.contain),
                             hintText: '아이디를 입력해주세요',
-                            onChanged: (value) {}),
+                            onChanged: (value) {
+                              joinInfo.id = value;
+                            }),
                         const SizedBox(
                           height: 15,
                         ),
@@ -64,7 +77,9 @@ class _JoinScreenState extends State<JoinScreen> {
                                 fit: BoxFit.contain),
                             isPassword: true,
                             hintText: '비밀번호를 입력해주세요',
-                            onChanged: (value) {}),
+                            onChanged: (value) {
+                              joinInfo.password = value;
+                            }),
                         const SizedBox(
                           height: 15,
                         ),
@@ -74,7 +89,9 @@ class _JoinScreenState extends State<JoinScreen> {
                                 fit: BoxFit.contain),
                             isPassword: true,
                             hintText: '비밀번호를 다시 입력해주세요',
-                            onChanged: (value) {}),
+                            onChanged: (value) {
+                              joinInfo.passwordCheck = value;
+                            }),
                         const SizedBox(
                           height: 15,
                         ),
@@ -82,7 +99,9 @@ class _JoinScreenState extends State<JoinScreen> {
                             icon: SvgPicture.asset('$imagesAddress/ic_user.svg',
                                 fit: BoxFit.contain),
                             hintText: '닉네임을 입력해주세요',
-                            onChanged: (value) {}),
+                            onChanged: (value) {
+                              joinInfo.nickname = value;
+                            }),
                         const SizedBox(
                           height: 8,
                         ),
@@ -117,9 +136,12 @@ class _JoinScreenState extends State<JoinScreen> {
                             icon: SvgPicture.asset(
                                 '$imagesAddress/ic_phone.svg',
                                 fit: BoxFit.contain),
-                            keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
+                            keyboardType: const TextInputType.numberWithOptions(
+                                signed: false, decimal: false),
                             hintText: '전화번호를 입력해주세요',
-                            onChanged: (value) {}),
+                            onChanged: (value) {
+                              joinInfo.mobile = value;
+                            }),
                         const SizedBox(
                           height: 15,
                         ),
@@ -129,8 +151,18 @@ class _JoinScreenState extends State<JoinScreen> {
                           icon: SvgPicture.asset(
                               '$imagesAddress/ic_address.svg',
                               fit: BoxFit.contain),
-                          onChanged: (value) {},
-                          onTap: () {},
+                          onChanged: (value) {
+                            joinInfo.address = value;
+                          },
+                          controller: addressController,
+                          onTap: () async {
+                            final result = await Navigator.push(context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                              return const SearchAddressScreen();
+                            }));
+                            addressController.text = result ?? ''.toString();
+                          },
                         ),
                       ],
                     ),
@@ -139,11 +171,25 @@ class _JoinScreenState extends State<JoinScreen> {
               ),
               SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  child: CustomButton(onClick: () {}, text: '회원가입'))
+                  child: CustomButton(
+                      onClick: () {
+                        join(context);
+                      },
+                      text: '회원가입')
+              )
             ],
           ),
         ),
       ),
     );
+  }
+
+  void join(context) async {
+    try{
+      await AuthService().join(joinInfo);
+      Navigator.pop(context);
+    } catch(e) {
+      print(e.toString());
+    }
   }
 }
