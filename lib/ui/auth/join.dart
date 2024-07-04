@@ -187,9 +187,10 @@ class _JoinScreenState extends State<JoinScreen> {
   void join(context) async {
     try{
       await AuthService().join(joinInfo);
+      showSnackBar(context, '회원 가입 완료');
       Navigator.pop(context);
     } catch(e) {
-      print(e.toString());
+      showSnackBar(context, e.toString());
     }
   }
 }

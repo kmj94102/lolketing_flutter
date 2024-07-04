@@ -21,7 +21,7 @@ class AuthService {
     if(response.statusCode == 200) {
       return LoginResult.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
-      return throw('login fail \n ${jsonDecode(utf8.decode(response.bodyBytes))['detail']}');
+      return throw(jsonDecode(utf8.decode(response.bodyBytes))['detail']);
     }
   }
 
