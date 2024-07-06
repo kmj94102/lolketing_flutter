@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lolketing_flutter/ui/auth/login.dart';
+import 'package:lolketing_flutter/ui/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(),
+      home: const HomeScreen(),
     );
   }
 }
