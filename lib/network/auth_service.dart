@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:lolketing_flutter/model/address_model.dart';
 import 'package:lolketing_flutter/model/login_model.dart';
+import 'package:lolketing_flutter/model/user.dart';
 import 'package:lolketing_flutter/util/common.dart';
 
 class AuthService {
@@ -55,6 +56,25 @@ class AuthService {
       return AddressResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes))).mapper();
     } else {
       return throw('result \n ${jsonDecode(utf8.decode(response.bodyBytes))['detail']}');
+    }
+  }
+
+  Future<User> fetchMyInfo() async {
+    const url = '$baseUrl/user/select/myInfo';
+    http.Response response = await http.post(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'id': '9',
+        })
+    );
+
+    if(response.statusCode == 200) {
+      return User.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    } else {
+      return throw(jsonDecode(utf8.decode(response.bodyBytes))['detail']);
     }
   }
 }
