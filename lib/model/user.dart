@@ -154,4 +154,16 @@ class Coupon {
       'timestamp': timestamp,
     };
   }
+
+  String getTimeFormat() {
+    return convertFormattedDate(timestamp);
+  }
+
+  String getCouponName() {
+    if(name == 'COUPON001') {
+      return '신규 가입 쿠폰';
+    } else {
+      return '룰렛 쿠폰';
+    }
+  }
 }

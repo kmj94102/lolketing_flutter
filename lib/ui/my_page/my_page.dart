@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lolketing_flutter/custom/custom_header.dart';
+import 'package:lolketing_flutter/database/auth_database.dart';
+import 'package:lolketing_flutter/main.dart';
 import 'package:lolketing_flutter/model/grade.dart';
 import 'package:lolketing_flutter/model/user.dart';
 import 'package:lolketing_flutter/ui/dialog/cash_charging_dialog.dart';
+import 'package:lolketing_flutter/ui/dialog/coupon_list_dialog.dart';
 import 'package:lolketing_flutter/ui/dialog/logout_dialog.dart';
 import 'package:lolketing_flutter/ui/dialog/withdrawal_dialog.dart';
 import 'package:lolketing_flutter/util/common.dart';
@@ -174,17 +177,22 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                   child: _createInfoCard(
                                       'My 캐시', _user.getMyCashFormat(), '충전하기',
                                       () {
-                                showCashChargingDialog(context, 1000, () {});
+                                showCashChargingDialog(context, _user.cash,
+                                    (value) {
+                                  _doCashCharging(value);
+                                });
                               })),
                               const SizedBox(
                                 width: 24,
                               ),
                               Expanded(
-                                  child: _createInfoCard(
-                                      'My 쿠폰',
-                                      _user.getCouponProgress(),
-                                      '상세보기',
-                                      () {})),
+                                  child: _createInfoCard('My 쿠폰',
+                                      _user.getCouponProgress(), '상세보기', () {
+                                showCouponListDialog(context, _user.list,
+                                    (value) {
+                                  _doUsingCoupon(value);
+                                });
+                              })),
                             ],
                           ),
                         ),
@@ -206,9 +214,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                   color: ColorStyle.white,
                                 ),
                                 _createMyPageMenu('로그 아웃', () {
-                                  showLogoutDialog(context, () {
-                                    Navigator.of(context).pop();
-                                  });
+                                  showLogoutDialog(context, () => _doLogout());
                                 }),
                                 Container(
                                   width: MediaQuery.of(context).size.width,
@@ -216,9 +222,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                   color: ColorStyle.white,
                                 ),
                                 _createMyPageMenu('회원 탈퇴', () {
-                                  showWithdrawalDialog(context, () {
-                                    Navigator.of(context).pop();
-                                  });
+                                  showWithdrawalDialog(
+                                      context, () => _doWithdrawal());
                                 }),
                               ],
                             ),
@@ -337,6 +342,51 @@ class _MyPageScreenState extends State<MyPageScreen> {
   void _fetchMyInfo(context) async {
     try {
       final result = await AuthService().fetchMyInfo();
+      setState(() {
+        _user = result;
+      });
+      final id = await AuthDatabase().fetchLoginInfo();
+      print('\n\n\n${id.id}\n\n\n');
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  void _doLogout() async {
+    try {
+      AuthDatabase().logout();
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const MyApp()),
+        (Route<dynamic> route) => false,
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  void _doWithdrawal() async {
+    try {
+      AuthService().withdrawal();
+      AuthDatabase().logout();
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  void _doCashCharging(int cash) async {
+    try {
+      final result = await AuthService().cashCharging(cash);
+      setState(() {
+        _user = result;
+      });
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  void _doUsingCoupon(int couponId) async {
+    try {
+      final result = await AuthService().usingCoupon(couponId);
       setState(() {
         _user = result;
       });

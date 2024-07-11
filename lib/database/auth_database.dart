@@ -15,16 +15,38 @@ class AuthDatabase {
 
   Future<void> insertLoginInfo(LoginResult info) async {
     final db = await _helper.database;
-    var result = await db.insert(_helper.auth, info.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
-    print(result);
+    await db.insert(_helper.auth, info.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<LoginResult?> fetchLoginInfo() async {
+  Future<LoginResult> fetchLoginInfo() async {
     final db = await _helper.database;
     List<Map<String, dynamic>> result = await db.query(_helper.auth);
     return result.isEmpty
-        ? null
+        ? throw('유저 정보가 없습니다.')
         : LoginResult.fromJson(result.first);
+  }
+
+  Future<int> fetchUserIndex() async {
+    final db = await _helper.database;
+    List<Map<String, dynamic>> result = await db.query(_helper.auth);
+    return result.isEmpty
+        ? throw('유저 정보가 없습니다.')
+        : LoginResult.fromJson(result.first).id;
+  }
+
+  Future<String> fetchUserId() async {
+    final db = await _helper.database;
+    List<Map<String, dynamic>> result = await db.query(_helper.auth);
+    return result.isEmpty
+        ? throw('유저 정보가 없습니다.')
+        : LoginResult.fromJson(result.first).email;
+  }
+
+  Future<void> logout() async {
+    final db = await _helper.database;
+    final id = await fetchUserIndex();
+
+    db.delete(_helper.auth, where: 'id = ?', whereArgs: [id]);
   }
 
 }

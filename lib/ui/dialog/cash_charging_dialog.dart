@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lolketing_flutter/custom/custom_text_field.dart';
 import 'package:lolketing_flutter/style/color.dart';
@@ -8,7 +7,9 @@ import 'package:lolketing_flutter/ui/dialog/common/dual_dialog_button.dart';
 import 'package:lolketing_flutter/util/common.dart';
 
 void showCashChargingDialog(
-    BuildContext context, int myCash, Function() onCharging) {
+    BuildContext context, int myCash, ValueChanged<int> onCharging) {
+  var chargingCash = 0;
+
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -48,7 +49,11 @@ void showCashChargingDialog(
                 ),
                 CustomTextField(
                   hintText: '충전할 금액',
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    try {
+                      chargingCash = int.parse(value);
+                    } catch (e){ e.toString(); }
+                  },
                   keyboardType: TextInputType.number,
                   suffix: const Text(
                     '원',
@@ -59,7 +64,10 @@ void showCashChargingDialog(
             ),
           ),
           bottom: DualDialogButton(
-              okTap: onCharging,
+              okTap: () {
+                onCharging(chargingCash);
+                Navigator.of(context).pop();
+              },
               okButtonText: '충전하기',
               cancelTap: () {
                 Navigator.of(context).pop();

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 const String imagesAddress = 'assets/images';
-const String baseUrl = 'https://port-0-mj-api-e9btb72blgnd5rgr.sel3.cloudtype.app';
+const String baseUrl =
+    'https://port-0-mj-api-e9btb72blgnd5rgr.sel3.cloudtype.app';
 
 void showSnackBar(BuildContext context, String message) {
   final snackBar = SnackBar(
@@ -21,4 +22,12 @@ String priceFormat(int amount) {
 
 String priceFormatWon(int amount) {
   return '${priceFormat(amount)}원';
+}
+
+String convertFormattedDate(String dateTimeString,
+    {String format = 'yyyy.MM.dd'}) {
+
+  DateTime dateTime = DateTime.parse(dateTimeString);
+  DateFormat formatter = DateFormat(format);
+  return formatter.format(dateTime);
 }

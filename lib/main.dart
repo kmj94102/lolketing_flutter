@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lolketing_flutter/ui/auth/login.dart';
 import 'package:lolketing_flutter/ui/home.dart';
 
 void main() {

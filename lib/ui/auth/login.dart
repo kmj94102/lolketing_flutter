@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:lolketing_flutter/custom/custom_button.dart';
 import 'package:lolketing_flutter/custom/custom_text_field.dart';
 import 'package:lolketing_flutter/database/auth_database.dart';
+import 'package:lolketing_flutter/main.dart';
 import 'package:lolketing_flutter/model/login_model.dart';
 import 'package:lolketing_flutter/network/auth_service.dart';
 import 'package:lolketing_flutter/ui/auth/join.dart';
@@ -24,6 +25,12 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       var result = await AuthService().emailLogin(info);
       databaseClient.insertLoginInfo(result);
+
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const MyApp()),
+            (Route<dynamic> route) => false,
+      );
     } catch(e) {
       showSnackBar(context, e.toString());
     }

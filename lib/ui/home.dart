@@ -1,13 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:lolketing_flutter/ui/auth/login.dart';
 import 'package:lolketing_flutter/ui/my_page/my_page.dart';
 import 'package:lolketing_flutter/util/common.dart';
 
+import '../database/auth_database.dart';
 import '../style/color.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    _isLoginCheck();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,5 +115,16 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _isLoginCheck() async {
+    try {
+      await AuthDatabase().fetchUserIndex();
+    } catch(e) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (Route<dynamic> route) => false,
+      );
+    }
   }
 }

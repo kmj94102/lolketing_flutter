@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lolketing_flutter/custom/custom_text_field.dart';
 import 'package:lolketing_flutter/style/color.dart';
@@ -23,6 +22,7 @@ void showWithdrawalDialog(BuildContext context, Function() okTap) {
               children: [
                 const Text(
                   '회원 탈퇴를 진행하시려면\n아래의 입력창에 \'회원 탈퇴\'를 입력 후\n탈퇴하기 버튼을 눌러주세요.',
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: ColorStyle.lightGray, fontSize: 16),
                 ),
                 const SizedBox(

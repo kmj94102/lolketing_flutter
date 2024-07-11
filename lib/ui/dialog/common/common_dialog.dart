@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lolketing_flutter/style/color.dart';
 
@@ -18,6 +17,7 @@ class CommonDialog extends StatelessWidget {
         behavior: HitTestBehavior.opaque,
         onTap: () => Navigator.of(context).pop(),
         child: GestureDetector(
+          onTap: (){},
           child: Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
