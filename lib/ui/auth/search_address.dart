@@ -4,6 +4,7 @@ import 'package:lolketing_flutter/custom/custom_button.dart';
 import 'package:lolketing_flutter/custom/custom_text_field.dart';
 import 'package:lolketing_flutter/model/address_model.dart';
 import 'package:lolketing_flutter/network/auth_service.dart';
+import 'package:lolketing_flutter/structure/base_container.dart';
 
 import '../../style/color.dart';
 import '../../util/common.dart';
@@ -24,84 +25,78 @@ class _SearchAddressScreenState extends State<SearchAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(color: ColorStyle.black),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 16, left: 20),
-                child: SvgPicture.asset(
-                  '$imagesAddress/ic_arrow_left.svg',
-                  width: 24,
-                  height: 24,
-                ),
+    return BaseContainer(
+      isScroll: false,
+      header: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 16, left: 20),
+              child: SvgPicture.asset(
+                '$imagesAddress/ic_arrow_left.svg',
+                width: 24,
+                height: 24,
               ),
-              Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    CustomTextField(
-                      hintText: '지번, 도로명, 건물명으로 검색',
-                      controller: addressController,
-                      textInputAction: TextInputAction.search,
-                      maxLength: 100,
-                      onChanged: (value) {},
-                      onSubmitted: (value) async {
-                        final result = await AuthService().searchAddress(value);
-                        setState(() {
-                          addressResult = result;
-                        });
-                      },
-                      icon: SvgPicture.asset('$imagesAddress/ic_search.svg'),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 1,
-                      color: ColorStyle.gray,
-                    ),
-                    isSearchMode
-                        ? Expanded(
-                            child: addressResult.list.isEmpty
-                                ? _buildEmptyState()
-                                : _buildAddressListView())
-                        : Expanded(
-                            child: CustomTextField(
-                                icon: SvgPicture.asset(
-                                    '$imagesAddress/ic_address.svg'),
-                                hintText: '상세 주소',
-                                onChanged: (value) {
-                                  detailAddress = value;
-                                }))
-                  ],
-                ),
-              )),
-              isSearchMode
-                  ? const SizedBox()
-                  : SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: CustomButton(
-                          text: '주소 설정',
-                          onClick: () {
-                            Navigator.pop(
-                                context, '$selectAddress $detailAddress');
-                          }),
-                    )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 15,
+            ),
+            CustomTextField(
+              hintText: '지번, 도로명, 건물명으로 검색',
+              controller: addressController,
+              textInputAction: TextInputAction.search,
+              maxLength: 100,
+              onChanged: (value) {},
+              onSubmitted: (value) async {
+                final result = await AuthService().searchAddress(value);
+                setState(() {
+                  addressResult = result;
+                });
+              },
+              icon: SvgPicture.asset('$imagesAddress/ic_search.svg'),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 1,
+              color: ColorStyle.gray,
+            ),
+            isSearchMode
+                ? Expanded(
+                    child: addressResult.list.isEmpty
+                        ? _buildEmptyState()
+                        : _buildAddressListView())
+                : Expanded(
+                    child: CustomTextField(
+                        icon: SvgPicture.asset('$imagesAddress/ic_address.svg'),
+                        hintText: '상세 주소',
+                        onChanged: (value) {
+                          detailAddress = value;
+                        }))
+          ],
+        ),
+      ),
+      bottom: isSearchMode
+          ? const SizedBox()
+          : SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: CustomButton(
+                  text: '주소 설정',
+                  onClick: () {
+                    Navigator.pop(context, '$selectAddress $detailAddress');
+                  }),
+            ),
     );
   }
 
