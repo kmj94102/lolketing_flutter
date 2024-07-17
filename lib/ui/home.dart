@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:lolketing_flutter/structure/base_container.dart';
 import 'package:lolketing_flutter/ui/auth/login.dart';
+import 'package:lolketing_flutter/ui/event/event.dart';
 import 'package:lolketing_flutter/ui/my_page/my_page.dart';
 import 'package:lolketing_flutter/util/common.dart';
 
@@ -46,7 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       _buildHomeIcon(
                           '$imagesAddress/ic_board.svg', '게시판', () {}),
                       _buildHomeIcon(
-                          '$imagesAddress/ic_event.svg', '이벤트', () {}),
+                          '$imagesAddress/ic_event.svg', '이벤트', () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                              return const EventScreen();
+                            }));
+                      }),
                       _buildHomeIcon('$imagesAddress/ic_my_page.svg', '내 정보',
                           () {
                         Navigator.push(context,
