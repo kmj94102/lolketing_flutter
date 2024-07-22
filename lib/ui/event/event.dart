@@ -1,12 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:lolketing_flutter/custom/custom_header.dart';
+import 'package:lolketing_flutter/network/auth_service.dart';
 import 'package:lolketing_flutter/structure/base_container.dart';
+import 'package:lolketing_flutter/ui/dialog/coupons_already_issued_dialog.dart';
+import 'package:lolketing_flutter/ui/dialog/issuance_completed_dialog.dart';
 import 'package:lolketing_flutter/ui/event/roulette.dart';
+import 'package:lolketing_flutter/ui/my_page/my_page.dart';
 
 import '../../style/color.dart';
+import '../../util/common.dart';
 
-class EventScreen extends StatelessWidget {
+class EventScreen extends StatefulWidget {
   const EventScreen({super.key});
+
+  @override
+  State<EventScreen> createState() => _EventScreenState();
+}
+
+class _EventScreenState extends State<EventScreen> {
+  var _isIssued = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchNewUserCoupon();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +39,7 @@ class EventScreen extends StatelessWidget {
           child: Column(
             children: [
               _createEventItem(
-                context: context,
+                  context: context,
                   eventNumber: 1,
                   title: '신규 가입 웰컴 선물',
                   contents: const TextSpan(
@@ -29,8 +47,10 @@ class EventScreen extends StatelessWidget {
                       style:
                           TextStyle(color: ColorStyle.lightGray, fontSize: 16)),
                   buttonText: '쿠폰 받기',
-                  onTap: () {}),
-              const SizedBox(height: 20,),
+                  onTap: _insertNewUserCoupon),
+              const SizedBox(
+                height: 20,
+              ),
               _createEventItem(
                   context: context,
                   eventNumber: 2,
@@ -51,14 +71,16 @@ class EventScreen extends StatelessWidget {
                         TextSpan(
                             text: '\n\n해당 이벤트는 횟 수 제한 없이 참여 가능합니다. ',
                             style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.normal, )),
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                            )),
                       ]),
                   buttonText: '룰렛 페이지 이동',
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return const RouletteScreen();
-                        }));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                      return const RouletteScreen();
+                    }));
                   }),
             ],
           ),
@@ -68,9 +90,8 @@ class EventScreen extends StatelessWidget {
   }
 
   Widget _createEventItem(
-      {
-        required BuildContext context,
-        required int eventNumber,
+      {required BuildContext context,
+      required int eventNumber,
       required String title,
       required TextSpan contents,
       required String buttonText,
@@ -116,7 +137,10 @@ class EventScreen extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          RichText(text: contents, textAlign: TextAlign.center,),
+          RichText(
+            text: contents,
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(
             height: 15,
           ),
@@ -135,8 +159,8 @@ class EventScreen extends StatelessWidget {
             child: GestureDetector(
               onTap: onTap,
               child: Padding(
-                padding:
-                    const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+                padding: const EdgeInsets.only(
+                    top: 5, bottom: 5, left: 10, right: 10),
                 child: Text(
                   buttonText,
                   style: const TextStyle(
@@ -154,5 +178,39 @@ class EventScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _fetchNewUserCoupon() async {
+    final isIssued = await AuthService().fetchNewUserCoupon();
+    setState(() {
+      _isIssued = isIssued;
+    });
+  }
+
+  void _insertNewUserCoupon() async {
+    if (_isIssued) {
+      showCouponsAlreadyIssuedDialog(context);
+    } else {
+      try {
+        await AuthService().insertNewUserCoupon();
+        setState((){
+          _isIssued = true;
+        });
+        showCompletedDialog();
+      } catch (e) {
+        showSnackBar(context, e.toString());
+      }
+    }
+  }
+
+  void showCompletedDialog() {
+    showIssuanceCompletedDialog(
+        context,
+            () => {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (BuildContext context) {
+                return const MyPageScreen();
+              }))
+        });
   }
 }
