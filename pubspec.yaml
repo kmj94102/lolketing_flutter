@@ -31,6 +31,7 @@ dependencies:
     sdk: flutter
 
   flutter_svg: ^1.1.6
+  lottie: ^3.1.2
   intl: ^0.17.0
   sqflite:
   path:
@@ -53,8 +54,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
-  http: ^0.13.5
-  flutter_svg: ^1.1.6
+  http: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

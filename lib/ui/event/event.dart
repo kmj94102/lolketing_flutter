@@ -6,6 +6,7 @@ import 'package:lolketing_flutter/ui/dialog/coupons_already_issued_dialog.dart';
 import 'package:lolketing_flutter/ui/dialog/issuance_completed_dialog.dart';
 import 'package:lolketing_flutter/ui/event/roulette.dart';
 import 'package:lolketing_flutter/ui/my_page/my_page.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../style/color.dart';
 import '../../util/common.dart';
@@ -17,7 +18,8 @@ class EventScreen extends StatefulWidget {
   State<EventScreen> createState() => _EventScreenState();
 }
 
-class _EventScreenState extends State<EventScreen> {
+class _EventScreenState extends State<EventScreen>
+    with SingleTickerProviderStateMixin {
   var _isIssued = false;
 
   @override
@@ -46,6 +48,7 @@ class _EventScreenState extends State<EventScreen> {
                       text: '신규 가입 기념\n500RP 쿠폰 발급',
                       style:
                           TextStyle(color: ColorStyle.lightGray, fontSize: 16)),
+                  animationAddress: '$imagesAddress/hello.json',
                   buttonText: '쿠폰 받기',
                   onTap: _insertNewUserCoupon),
               const SizedBox(
@@ -75,6 +78,7 @@ class _EventScreenState extends State<EventScreen> {
                               fontWeight: FontWeight.normal,
                             )),
                       ]),
+                  animationAddress: '$imagesAddress/ticket.json',
                   buttonText: '룰렛 페이지 이동',
                   onTap: () {
                     Navigator.push(context,
@@ -94,6 +98,7 @@ class _EventScreenState extends State<EventScreen> {
       required int eventNumber,
       required String title,
       required TextSpan contents,
+      required String animationAddress,
       required String buttonText,
       required Function() onTap}) {
     return Container(
@@ -144,11 +149,8 @@ class _EventScreenState extends State<EventScreen> {
           const SizedBox(
             height: 15,
           ),
-          Container(
-            color: ColorStyle.gray,
-            width: 130,
-            height: 130,
-          ),
+          Lottie.asset(animationAddress,
+              repeat: true, reverse: false, animate: true, width: 130, height: 130),
           const SizedBox(
             height: 15,
           ),
@@ -193,7 +195,7 @@ class _EventScreenState extends State<EventScreen> {
     } else {
       try {
         await AuthService().insertNewUserCoupon();
-        setState((){
+        setState(() {
           _isIssued = true;
         });
         showCompletedDialog();
@@ -206,11 +208,11 @@ class _EventScreenState extends State<EventScreen> {
   void showCompletedDialog() {
     showIssuanceCompletedDialog(
         context,
-            () => {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) {
+        () => {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (BuildContext context) {
                 return const MyPageScreen();
               }))
-        });
+            });
   }
 }
