@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/route_manager.dart';
 import 'package:lolketing_flutter/custom/custom_header.dart';
 import 'package:lolketing_flutter/database/auth_database.dart';
 import 'package:lolketing_flutter/main.dart';
 import 'package:lolketing_flutter/model/grade.dart';
 import 'package:lolketing_flutter/model/user.dart';
 import 'package:lolketing_flutter/structure/base_container.dart';
+import 'package:lolketing_flutter/ui/auth/login.dart';
 import 'package:lolketing_flutter/ui/dialog/cash_charging_dialog.dart';
 import 'package:lolketing_flutter/ui/dialog/coupon_list_dialog.dart';
 import 'package:lolketing_flutter/ui/dialog/logout_dialog.dart';
@@ -332,19 +334,16 @@ class _MyPageScreenState extends State<MyPageScreen> {
       final id = await AuthDatabase().fetchLoginInfo();
       print('\n\n\n${id.id}\n\n\n');
     } catch (e) {
-      showSnackBar(context, e.toString());
+      // showSnackBar(context, e.toString());
     }
   }
 
   void _doLogout() async {
     try {
       AuthDatabase().logout();
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const MyApp()),
-        (Route<dynamic> route) => false,
-      );
+      Get.offAll(const LoginScreen());
     } catch (e) {
-      showSnackBar(context, e.toString());
+      // showSnackBar(context, e.toString());
     }
   }
 
@@ -353,7 +352,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
       AuthService().withdrawal();
       AuthDatabase().logout();
     } catch (e) {
-      showSnackBar(context, e.toString());
+      // showSnackBar(context, e.toString());
     }
   }
 
@@ -364,7 +363,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
         _user = result;
       });
     } catch (e) {
-      showSnackBar(context, e.toString());
+      // showSnackBar(context, e.toString());
     }
   }
 
@@ -375,7 +374,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
         _user = result;
       });
     } catch (e) {
-      showSnackBar(context, e.toString());
+      // showSnackBar(context, e.toString());
     }
   }
 }

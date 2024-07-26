@@ -5,8 +5,6 @@ import 'package:lolketing_flutter/ui/dialog/common/common_dialog.dart';
 import 'package:lolketing_flutter/ui/dialog/common/common_dialog_title.dart';
 import 'package:lolketing_flutter/ui/dialog/common/dual_dialog_button.dart';
 
-import '../../util/common.dart';
-
 void showWithdrawalDialog(BuildContext context, Function() okTap) {
   var confirmationText = '';
 
@@ -37,7 +35,7 @@ void showWithdrawalDialog(BuildContext context, Function() okTap) {
                 if(confirmationText == '회원 탈퇴') {
                   okTap();
                 } else {
-                  showSnackBar(context, '회원 탈퇴를 정확히 입력해주세요' );
+                  // showSnackBar(context, '회원 탈퇴를 정확히 입력해주세요' );
                 }
               },
               okButtonColor: ColorStyle.red,

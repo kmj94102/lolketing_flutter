@@ -1,18 +1,23 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../style/color.dart';
 
 const String imagesAddress = 'assets/images';
 const String baseUrl =
     'https://port-0-mj-api-e9btb72blgnd5rgr.sel3.cloudtype.app';
 
-void showSnackBar(BuildContext context, String message) {
-  final snackBar = SnackBar(
-    content: Text(message),
-    duration: const Duration(seconds: 3),
+void showSnackBar({required String message, String title = ''}) {
+  Get.snackbar(
+    title,
+    message,
+    backgroundColor: ColorStyle.lightBlack,
+    colorText: ColorStyle.white,
+    snackPosition: SnackPosition.BOTTOM,
+    borderRadius: 0,
+    titleText: title.isEmpty ? const SizedBox() : null,
   );
-
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
 String priceFormat(int amount) {

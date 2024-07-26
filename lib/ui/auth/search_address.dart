@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/route_manager.dart';
 import 'package:lolketing_flutter/custom/custom_button.dart';
 import 'package:lolketing_flutter/custom/custom_text_field.dart';
 import 'package:lolketing_flutter/model/address_model.dart';
@@ -18,10 +19,10 @@ class SearchAddressScreen extends StatefulWidget {
 
 class _SearchAddressScreenState extends State<SearchAddressScreen> {
   final addressController = TextEditingController();
+  final addressDetailController = TextEditingController();
   var isSearchMode = true;
   var addressResult = AddressResult(list: [], isMoreData: false);
   var selectAddress = '';
-  var detailAddress = '';
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,6 @@ class _SearchAddressScreenState extends State<SearchAddressScreen> {
               controller: addressController,
               textInputAction: TextInputAction.search,
               maxLength: 100,
-              onChanged: (value) {},
               onSubmitted: (value) async {
                 final result = await AuthService().searchAddress(value);
                 setState(() {
@@ -79,11 +79,9 @@ class _SearchAddressScreenState extends State<SearchAddressScreen> {
                         : _buildAddressListView())
                 : Expanded(
                     child: CustomTextField(
+                        controller: addressDetailController,
                         icon: SvgPicture.asset('$imagesAddress/ic_address.svg'),
-                        hintText: '상세 주소',
-                        onChanged: (value) {
-                          detailAddress = value;
-                        }))
+                        hintText: '상세 주소'))
           ],
         ),
       ),
@@ -93,8 +91,11 @@ class _SearchAddressScreenState extends State<SearchAddressScreen> {
               width: MediaQuery.of(context).size.width,
               child: CustomButton(
                   text: '주소 설정',
+                  borderRadius: 0,
                   onClick: () {
-                    Navigator.pop(context, '$selectAddress $detailAddress');
+                    Get.back(
+                        result:
+                            '$selectAddress ${addressDetailController.text.trim()}');
                   }),
             ),
     );

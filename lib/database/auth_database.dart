@@ -26,6 +26,14 @@ class AuthDatabase {
         : LoginResult.fromJson(result.first);
   }
 
+  Future<LoginResult?> fetchUser() async {
+    final db = await _helper.database;
+    List<Map<String, dynamic>> result = await db.query(_helper.auth);
+    return result.isEmpty
+        ? null
+        : LoginResult.fromJson(result.first);
+  }
+
   Future<int> fetchUserIndex() async {
     final db = await _helper.database;
     List<Map<String, dynamic>> result = await db.query(_helper.auth);

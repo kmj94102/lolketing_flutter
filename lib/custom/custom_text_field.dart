@@ -3,7 +3,7 @@ import 'package:lolketing_flutter/style/color.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hintText;
-  final ValueChanged<String> onChanged;
+  final ValueChanged<String>? onChanged;
   final Widget? icon;
   final Widget? suffix;
   final bool enable;
@@ -18,7 +18,7 @@ class CustomTextField extends StatelessWidget {
 
   const CustomTextField({Key? key,
     required this.hintText,
-    required this.onChanged,
+    this.onChanged,
     this.icon,
     this.suffix,
     this.enable = true,

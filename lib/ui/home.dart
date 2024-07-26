@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/route_manager.dart';
 import 'package:lolketing_flutter/structure/base_container.dart';
-import 'package:lolketing_flutter/ui/auth/login.dart';
 import 'package:lolketing_flutter/ui/event/event.dart';
 import 'package:lolketing_flutter/ui/my_page/my_page.dart';
 import 'package:lolketing_flutter/util/common.dart';
 
-import '../database/auth_database.dart';
 import '../style/color.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,15 +17,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() {
-    super.initState();
-    _isLoginCheck();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BaseContainer(
-      isScroll: false,
+        isScroll: false,
         header: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: 250,
@@ -46,20 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       _buildHomeIcon(
                           '$imagesAddress/ic_board.svg', '게시판', () {}),
-                      _buildHomeIcon(
-                          '$imagesAddress/ic_event.svg', '이벤트', () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (BuildContext context) {
-                              return const EventScreen();
-                            }));
-                      }),
+                      _buildHomeIcon('$imagesAddress/ic_event.svg', '이벤트',
+                          () => Get.to(const EventScreen())),
                       _buildHomeIcon('$imagesAddress/ic_my_page.svg', '내 정보',
-                          () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (BuildContext context) {
-                          return const MyPageScreen();
-                        }));
-                      }),
+                          () => Get.to(const MyPageScreen())),
                     ],
                   ),
                   Row(
@@ -106,16 +89,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
-  }
-
-  Future<void> _isLoginCheck() async {
-    try {
-      await AuthDatabase().fetchUserIndex();
-    } catch (e) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-        (Route<dynamic> route) => false,
-      );
-    }
   }
 }

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/instance_manager.dart';
+import 'package:lolketing_flutter/controller/auth_controller.dart';
 import 'package:lolketing_flutter/custom/custom_button.dart';
 import 'package:lolketing_flutter/custom/custom_text_field.dart';
-import 'package:lolketing_flutter/database/auth_database.dart';
-import 'package:lolketing_flutter/main.dart';
-import 'package:lolketing_flutter/model/login_model.dart';
-import 'package:lolketing_flutter/network/auth_service.dart';
 import 'package:lolketing_flutter/structure/base_container.dart';
 import 'package:lolketing_flutter/ui/auth/join.dart';
 import 'package:lolketing_flutter/util/common.dart';
@@ -19,22 +17,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late AuthDatabase databaseClient = AuthDatabase();
-  var info = LoginInfo();
+  var idController = TextEditingController();
+  var passwordController = TextEditingController();
 
   void login() async {
-    try {
-      var result = await AuthService().emailLogin(info);
-      databaseClient.insertLoginInfo(result);
-
-      if (!mounted) return;
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => const MyApp()),
-            (Route<dynamic> route) => false,
-      );
-    } catch(e) {
-      showSnackBar(context, e.toString());
-    }
+    Get.find<AuthController>().login(
+        id: idController.text.trim(),
+        password: passwordController.text.trim());
   }
 
   @override
@@ -57,25 +46,23 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 70,
             ),
             CustomTextField(
-                hintText: '아이디를 입력해주세요',
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                icon: SvgPicture.asset('$imagesAddress/ic_user.svg',
-                    fit: BoxFit.contain),
-                onChanged: (text) {
-                  info.id = text;
-                }),
+              controller: idController,
+              hintText: '아이디를 입력해주세요',
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              icon: SvgPicture.asset('$imagesAddress/ic_user.svg',
+                  fit: BoxFit.contain),
+            ),
             const SizedBox(
               height: 15,
             ),
             CustomTextField(
-                hintText: '비밀번호를 입력해주세요',
-                isPassword: true,
-                icon: SvgPicture.asset('$imagesAddress/ic_password.svg',
-                    fit: BoxFit.contain),
-                onChanged: (text) {
-                  info.password = text;
-                }),
+              controller: passwordController,
+              hintText: '비밀번호를 입력해주세요',
+              isPassword: true,
+              icon: SvgPicture.asset('$imagesAddress/ic_password.svg',
+                  fit: BoxFit.contain),
+            ),
             const SizedBox(
               height: 15,
             ),
@@ -95,20 +82,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const Text(
                     '비밀번호 찾기',
-                    style: TextStyle(
-                        color: ColorStyle.mainColor, fontSize: 16),
+                    style: TextStyle(color: ColorStyle.mainColor, fontSize: 16),
                   ),
                   GestureDetector(
                     child: const Text(
                       '회원가입',
-                      style: TextStyle(
-                          color: ColorStyle.mainColor, fontSize: 16),
+                      style:
+                          TextStyle(color: ColorStyle.mainColor, fontSize: 16),
                     ),
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (BuildContext context) {
-                            return const JoinScreen();
-                          }));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return const JoinScreen();
+                      }));
                     },
                   ),
                 ],

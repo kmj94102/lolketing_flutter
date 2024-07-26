@@ -147,7 +147,7 @@ class _RouletteScreenState extends State<RouletteScreen>
     final count = await AuthService().insertRouletteCoupon(rp);
     setState(() {
       _rouletteCount = count;
-      showSnackBar(context, '${rp}RP 쿠폰 당첨!!');
+      // showSnackBar(context, '${rp}RP 쿠폰 당첨!!');
     });
   }
 

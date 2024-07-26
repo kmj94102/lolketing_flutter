@@ -200,7 +200,7 @@ class _EventScreenState extends State<EventScreen>
         });
         showCompletedDialog();
       } catch (e) {
-        showSnackBar(context, e.toString());
+        // showSnackBar(context, e.toString());
       }
     }
   }

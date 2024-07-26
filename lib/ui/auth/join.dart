@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/route_manager.dart';
+import 'package:lolketing_flutter/controller/auth_controller.dart';
 import 'package:lolketing_flutter/custom/custom_button.dart';
 import 'package:lolketing_flutter/custom/custom_text_field.dart';
 import 'package:lolketing_flutter/model/login_model.dart';
 import 'package:lolketing_flutter/structure/base_container.dart';
 import 'package:lolketing_flutter/ui/auth/search_address.dart';
 
-import '../../network/auth_service.dart';
 import '../../style/color.dart';
 import '../../util/common.dart';
 
@@ -26,7 +28,7 @@ class _JoinScreenState extends State<JoinScreen> {
     return BaseContainer(
       header: GestureDetector(
         onTap: () {
-          Navigator.pop(context);
+          Get.back();
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +55,8 @@ class _JoinScreenState extends State<JoinScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 25, bottom: 25, left: 20, right: 20),
+        padding:
+            const EdgeInsets.only(top: 25, bottom: 25, left: 20, right: 20),
         child: Column(
           children: [
             CustomTextField(
@@ -145,10 +148,7 @@ class _JoinScreenState extends State<JoinScreen> {
               },
               controller: addressController,
               onTap: () async {
-                final result = await Navigator.push(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
-                  return const SearchAddressScreen();
-                }));
+                final result = await Get.to(() => const SearchAddressScreen());
                 addressController.text = result ?? ''.toString();
               },
             ),
@@ -159,19 +159,9 @@ class _JoinScreenState extends State<JoinScreen> {
           width: MediaQuery.of(context).size.width,
           child: CustomButton(
               onClick: () {
-                join(context);
+                Get.find<AuthController>().join(info: joinInfo);
               },
               text: '회원가입')),
     );
-  }
-
-  void join(context) async {
-    try {
-      await AuthService().join(joinInfo);
-      showSnackBar(context, '회원 가입 완료');
-      Navigator.pop(context);
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
   }
 }
