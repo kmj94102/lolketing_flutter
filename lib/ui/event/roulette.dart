@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:lolketing_flutter/controller/roulette_controller.dart';
 import 'package:lolketing_flutter/custom/custom_button.dart';
 import 'package:lolketing_flutter/custom/custom_header.dart';
-import 'package:lolketing_flutter/network/auth_service.dart';
 import 'package:lolketing_flutter/structure/base_container.dart';
 import 'package:lolketing_flutter/style/color.dart';
-import 'package:lolketing_flutter/ui/dialog/roulette_exhaustion_dialog.dart';
 import 'package:lolketing_flutter/util/common.dart';
 
 class RouletteScreen extends StatefulWidget {
@@ -19,28 +19,28 @@ class RouletteScreen extends StatefulWidget {
 
 class _RouletteScreenState extends State<RouletteScreen>
     with SingleTickerProviderStateMixin {
-  var _rouletteCount = 0;
+  final rouletteController = Get.put(RouletteController());
   late AnimationController _controller;
   late Animation<double> _animation =
       Tween<double>(begin: 0, end: 0).animate(_controller);
-  late double _endAngle;
-  final Random _random = Random();
   bool _isFirstRun = true;
+
 
   @override
   void initState() {
     super.initState();
-    _fetchRouletteCount();
+    rouletteController.fetchRouletteCount();
 
     _controller =
         AnimationController(duration: const Duration(seconds: 2), vsync: this);
 
     _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed && !_isFirstRun) {
-        final rp = _getResultPoint(_animation.value.toInt());
-        _insertCoupon(rp);
-      } else if (status == AnimationStatus.completed && _isFirstRun) {
-        _isFirstRun = false;
+      if(status == AnimationStatus.completed) {
+        if(_isFirstRun) {
+          _isFirstRun = false;
+          return;
+        }
+        rouletteController.insertCoupon(_animation.value.toInt());
       }
     });
 
@@ -65,8 +65,8 @@ class _RouletteScreenState extends State<RouletteScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Column(
-              children: const [
+            const Column(
+              children: [
                 Text(
                   '100% 당첨 룰렛',
                   style: TextStyle(
@@ -115,9 +115,9 @@ class _RouletteScreenState extends State<RouletteScreen>
               ],
             ),
             Text(
-              _rouletteCount == 0
+              rouletteController.rouletteCount == 0
                   ? '룰렛 횟수를 모두 소진하였습니다.'
-                  : '$_rouletteCount번 더 돌릴 수 있어요!',
+                  : '${rouletteController.rouletteCount}번 더 돌릴 수 있어요!',
               style: const TextStyle(
                   color: ColorStyle.white,
                   fontSize: 20,
@@ -136,56 +136,17 @@ class _RouletteScreenState extends State<RouletteScreen>
     );
   }
 
-  void _fetchRouletteCount() async {
-    final count = await AuthService().fetchRouletteCount();
-    setState(() {
-      _rouletteCount = count;
-    });
-  }
-
-  void _insertCoupon(int rp) async {
-    final count = await AuthService().insertRouletteCoupon(rp);
-    setState(() {
-      _rouletteCount = count;
-      // showSnackBar(context, '${rp}RP 쿠폰 당첨!!');
-    });
-  }
-
   void _startRoulette() {
-    if (_rouletteCount <= 0) {
-      showRouletteExhaustionDialog(context);
-      return;
+    final endAngle = rouletteController.getEndAngle();
+
+    if(endAngle != null) {
+      _animation =
+      Tween<double>(begin: 0, end: endAngle + 1800).animate(_controller)
+        ..addListener(() {
+          setState(() {});
+        });
+      _controller.reset();
+      _controller.forward();
     }
-    _endAngle = _random.nextInt(360).toDouble();
-
-    _animation =
-        Tween<double>(begin: 0, end: _endAngle + 1800).animate(_controller)
-          ..addListener(() {
-            setState(() {});
-          });
-    _controller.reset();
-    _controller.forward();
-  }
-
-  int _getResultPoint(int deg) {
-    final currentDeg = deg % 360;
-
-    const ranges = {
-      [0, 45]: 2000,
-      [46, 90]: 300,
-      [91, 135]: 350,
-      [136, 180]: 200,
-      [181, 225]: 1000,
-      [226, 270]: 250,
-      [271, 315]: 450,
-    };
-
-    for (var range in ranges.keys) {
-      if (currentDeg > range[0] && currentDeg < range[1]) {
-        return ranges[range] ?? 250;
-      }
-    }
-
-    return 250;
   }
 }

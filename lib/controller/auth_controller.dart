@@ -11,7 +11,6 @@ class AuthController extends GetxController {
   LoginResult? _user;
 
   int? get id => _user?.id;
-
   String? get email => _user?.email;
 
   @override
@@ -56,6 +55,15 @@ class AuthController extends GetxController {
       showSnackBar(message: '회원 가입 완료');
       Get.back();
     } catch (e) {
+      showSnackBar(message: e.toString());
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      AuthDatabase databaseClient = AuthDatabase();
+      await databaseClient.logout();
+    } catch(e) {
       showSnackBar(message: e.toString());
     }
   }

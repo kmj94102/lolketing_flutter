@@ -20,6 +20,10 @@ void showSnackBar({required String message, String title = ''}) {
   );
 }
 
+void showNoUserInfoSnackBar() {
+  showSnackBar(message: '유저 정보가 없습니다');
+}
+
 String priceFormat(int amount) {
   final formatter = NumberFormat('#,###');
   return formatter.format(amount);

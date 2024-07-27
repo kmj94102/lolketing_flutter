@@ -35,10 +35,13 @@ class _SearchAddressScreenState extends State<SearchAddressScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 16, left: 20),
-              child: SvgPicture.asset(
-                '$imagesAddress/ic_arrow_left.svg',
-                width: 24,
-                height: 24,
+              child: GestureDetector(
+                onTap: () => Get.back(),
+                child: SvgPicture.asset(
+                  '$imagesAddress/ic_arrow_left.svg',
+                  width: 24,
+                  height: 24,
+                ),
               ),
             ),
           ],

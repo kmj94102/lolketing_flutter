@@ -153,9 +153,8 @@ class AuthService {
   }
 
   /// 신규 유저 쿠폰 발급 여부 조회
-  Future<bool> fetchNewUserCoupon() async {
+  Future<bool> fetchNewUserCoupon(String id) async {
     const url = '$baseUrl/user/select/newUserCoupon';
-    final id = await AuthDatabase().fetchUserId();
 
     http.Response response = await http.post(
         Uri.parse(url),
@@ -175,9 +174,8 @@ class AuthService {
   }
 
   /// 신규 유저 쿠폰 발급
-  Future<void> insertNewUserCoupon() async {
+  Future<void> insertNewUserCoupon(int index) async {
     const url = '$baseUrl/user/insert/newUserCoupon';
-    final id = await AuthDatabase().fetchUserIndex();
 
     http.Response response = await http.post(
         Uri.parse(url),
@@ -185,7 +183,7 @@ class AuthService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, dynamic>{
-          'id': id,
+          'id': index,
         })
     );
 

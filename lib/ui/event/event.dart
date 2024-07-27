@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lolketing_flutter/controller/event_controller.dart';
 import 'package:lolketing_flutter/custom/custom_header.dart';
-import 'package:lolketing_flutter/network/auth_service.dart';
 import 'package:lolketing_flutter/structure/base_container.dart';
-import 'package:lolketing_flutter/ui/dialog/coupons_already_issued_dialog.dart';
-import 'package:lolketing_flutter/ui/dialog/issuance_completed_dialog.dart';
 import 'package:lolketing_flutter/ui/event/roulette.dart';
-import 'package:lolketing_flutter/ui/my_page/my_page.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../style/color.dart';
@@ -20,12 +18,12 @@ class EventScreen extends StatefulWidget {
 
 class _EventScreenState extends State<EventScreen>
     with SingleTickerProviderStateMixin {
-  var _isIssued = false;
+  final eventController = Get.put(EventController());
 
   @override
   void initState() {
     super.initState();
-    _fetchNewUserCoupon();
+    eventController.fetchNewUserCoupon();
   }
 
   @override
@@ -50,7 +48,7 @@ class _EventScreenState extends State<EventScreen>
                           TextStyle(color: ColorStyle.lightGray, fontSize: 16)),
                   animationAddress: '$imagesAddress/hello.json',
                   buttonText: '쿠폰 받기',
-                  onTap: _insertNewUserCoupon),
+                  onTap: eventController.getCouponOnTap),
               const SizedBox(
                 height: 20,
               ),
@@ -180,39 +178,5 @@ class _EventScreenState extends State<EventScreen>
         ],
       ),
     );
-  }
-
-  void _fetchNewUserCoupon() async {
-    final isIssued = await AuthService().fetchNewUserCoupon();
-    setState(() {
-      _isIssued = isIssued;
-    });
-  }
-
-  void _insertNewUserCoupon() async {
-    if (_isIssued) {
-      showCouponsAlreadyIssuedDialog(context);
-    } else {
-      try {
-        await AuthService().insertNewUserCoupon();
-        setState(() {
-          _isIssued = true;
-        });
-        showCompletedDialog();
-      } catch (e) {
-        // showSnackBar(context, e.toString());
-      }
-    }
-  }
-
-  void showCompletedDialog() {
-    showIssuanceCompletedDialog(
-        context,
-        () => {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (BuildContext context) {
-                return const MyPageScreen();
-              }))
-            });
   }
 }
