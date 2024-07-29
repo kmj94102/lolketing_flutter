@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lolketing_flutter/style/color.dart';
 
 class CommonDialog extends StatelessWidget {
@@ -15,7 +16,7 @@ class CommonDialog extends StatelessWidget {
       backgroundColor: Colors.transparent,
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => Navigator.of(context).pop(),
+        onTap: () => Get.back(),
         child: GestureDetector(
           onTap: (){},
           child: Dialog(

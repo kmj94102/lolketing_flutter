@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lolketing_flutter/style/color.dart';
 import 'package:lolketing_flutter/ui/dialog/common/common_dialog.dart';
 import 'package:lolketing_flutter/ui/dialog/common/common_dialog_title.dart';
@@ -44,7 +45,7 @@ class _CouponListDialogState extends State<CouponListDialog> {
         ),
       ),
       bottom: SingleDialogButton(onTap: () {
-        Navigator.of(context).pop();
+        Get.back();
       }),
     );
   }
@@ -112,7 +113,7 @@ Widget _buildCouponList(List<Coupon> list, ValueChanged<int> onUseTap) {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-              if(!list[index].isUsed) {
+              if (!list[index].isUsed) {
                 onUseTap(list[index].id);
               }
             },
@@ -183,10 +184,8 @@ Widget _buildCouponList(List<Coupon> list, ValueChanged<int> onUseTap) {
 
 void showCouponListDialog(
     BuildContext context, List<Coupon> list, ValueChanged<int> onUseTap) {
-  showDialog(
-      context: context,
-      builder: (context) => CouponListDialog(
-            list: list,
-            onUseTap: onUseTap,
-          ));
+  Get.dialog(CouponListDialog(
+    list: list,
+    onUseTap: onUseTap,
+  ));
 }

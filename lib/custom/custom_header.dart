@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:lolketing_flutter/style/color.dart';
 import 'package:lolketing_flutter/util/common.dart';
 
@@ -21,7 +22,7 @@ class CustomHeader extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pop();
+                  Get.back();
                 },
                 child: Padding(
                     padding: const EdgeInsets.only(left: 20, top: 16, bottom: 16),

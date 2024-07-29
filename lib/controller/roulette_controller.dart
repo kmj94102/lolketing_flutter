@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:get/get.dart';
+import 'package:lolketing_flutter/ui/dialog/roulette_exhaustion_dialog.dart';
 import 'package:lolketing_flutter/util/common.dart';
 
 import '../network/auth_service.dart';
@@ -18,8 +19,7 @@ class RouletteController extends GetxController {
 
   double? getEndAngle() {
     if (_rouletteCount <= 0) {
-      // 다이얼로그로 변경 예정
-      showSnackBar(message: '룰렛 모두 소진');
+      showRouletteExhaustionDialog();
       return null;
     } else {
       return _random.nextInt(360).toDouble();

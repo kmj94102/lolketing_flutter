@@ -36,12 +36,12 @@ class _MyPageScreenState extends State<MyPageScreen> {
         title: '내 정보',
         tailWidget: SvgPicture.asset('$imagesAddress/ic_write.svg'),
       ),
-      body: Obx(() =>
-        Column(
+      body: Obx(
+        () => Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+              padding: const EdgeInsets.only(
+                  left: 20, right: 20, top: 15, bottom: 15),
               child: IntrinsicHeight(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -164,9 +164,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 children: [
                   Expanded(
                       child: _createInfoCard(
-                          'My 캐시', controller.user.getMyCashFormat(), '충전하기', () {
-                    showCashChargingDialog(context, controller.user.cash,
-                        (value) {
+                          'My 캐시', controller.user.getMyCashFormat(), '충전하기',
+                          () {
+                    showCashChargingDialog(controller.user.cash, (value) {
                       controller.doCashCharging(value);
                     });
                   })),
@@ -177,7 +177,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
                       child: _createInfoCard(
                           'My 쿠폰', controller.user.getCouponProgress(), '상세보기',
                           () {
-                    showCouponListDialog(context, controller.user.list, (value) {
+                    showCouponListDialog(context, controller.user.list,
+                        (value) {
                       controller.doUsingCoupon(value);
                     });
                   })),
@@ -200,7 +201,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                       color: ColorStyle.white,
                     ),
                     _createMyPageMenu('로그 아웃', () {
-                      showLogoutDialog(context, () => controller.doLogout());
+                      showLogoutDialog(controller.doLogout);
                     }),
                     Container(
                       width: MediaQuery.of(context).size.width,
@@ -208,8 +209,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                       color: ColorStyle.white,
                     ),
                     _createMyPageMenu('회원 탈퇴', () {
-                      showWithdrawalDialog(
-                          context, () => controller.doWithdrawal());
+                      showWithdrawalDialog(controller.doWithdrawal);
                     }),
                   ],
                 ),

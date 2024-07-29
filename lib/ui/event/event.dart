@@ -79,10 +79,7 @@ class _EventScreenState extends State<EventScreen>
                   animationAddress: '$imagesAddress/ticket.json',
                   buttonText: '룰렛 페이지 이동',
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (BuildContext context) {
-                      return const RouletteScreen();
-                    }));
+                    Get.to(const RouletteScreen());
                   }),
             ],
           ),

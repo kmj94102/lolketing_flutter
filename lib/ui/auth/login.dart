@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
 import 'package:lolketing_flutter/controller/auth_controller.dart';
 import 'package:lolketing_flutter/custom/custom_button.dart';
@@ -91,10 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           TextStyle(color: ColorStyle.mainColor, fontSize: 16),
                     ),
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return const JoinScreen();
-                      }));
+                      Get.to(const JoinScreen());
                     },
                   ),
                 ],
