@@ -4,6 +4,7 @@ import 'package:get/route_manager.dart';
 import 'package:lolketing_flutter/structure/base_container.dart';
 import 'package:lolketing_flutter/ui/event/event.dart';
 import 'package:lolketing_flutter/ui/my_page/my_page.dart';
+import 'package:lolketing_flutter/ui/shopping/shopping.dart';
 import 'package:lolketing_flutter/util/common.dart';
 
 import '../style/color.dart';
@@ -52,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           '$imagesAddress/ic_trophy.svg', '리그 정보', () {}),
                       _buildHomeIcon(
                           '$imagesAddress/ic_ticket.svg', '타캣 예매', () {}),
-                      _buildHomeIcon(
-                          '$imagesAddress/ic_shopping.svg', '샵', () {}),
+                      _buildHomeIcon('$imagesAddress/ic_shopping.svg', '샵',
+                          () => Get.to(const ShoppingScreen())),
                     ],
                   ),
                   Row(
