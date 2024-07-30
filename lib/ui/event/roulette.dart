@@ -131,6 +131,7 @@ class _RouletteScreenState extends State<RouletteScreen>
         child: CustomButton(
           text: '돌리기',
           onClick: _startRoulette,
+          borderRadius: 0,
         ),
       ),
     );

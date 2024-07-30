@@ -22,6 +22,7 @@ class CustomButton extends StatelessWidget {
     return TextButton(
       onPressed: onClick,
       style: TextButton.styleFrom(
+          fixedSize: Size(MediaQuery.of(context).size.width, 56),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
           ),
@@ -31,10 +32,7 @@ class CustomButton extends StatelessWidget {
               color: ColorStyle.white,
               fontSize: 20,
               fontWeight: FontWeight.bold)),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
-        child: Text(text),
-      ),
+      child: Text(text),
     );
   }
 }
