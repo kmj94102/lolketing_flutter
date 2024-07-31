@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:lolketing_flutter/controller/shopping_controller.dart';
 import 'package:lolketing_flutter/custom/custom_image_header.dart';
@@ -30,6 +29,7 @@ class _ShoppingScreenState extends State<ShoppingScreen>
     _tabController =
         TabController(length: controller.tabList.length, vsync: this);
     controller.fetchGoodsItems();
+    controller.updateCartCount();
   }
 
   @override
@@ -90,7 +90,10 @@ class _ShoppingScreenState extends State<ShoppingScreen>
 
   Widget _buildShopItem(ShopItem item) {
     return GestureDetector(
-      onTap: () => Get.to(ShoppingDetail(), arguments: item),
+      onTap: () async {
+        await Get.to(const ShoppingDetail(), arguments: {'id': item.goodsId});
+        controller.updateCartCount();
+      },
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
