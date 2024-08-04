@@ -8,6 +8,12 @@ class ShoppingController extends GetxController {
   final _cartCount = 0.obs;
   int get cartCount => _cartCount.value;
 
+  final _cartItems = <CartItem>[].obs;
+  List<CartItem> get cartItems => _cartItems;
+
+  int get totalPrice => _cartItems.where((item) => item.isChecked).fold(0, (sum, item) => sum + item.price);
+  bool get isAllCheck => _cartItems.every((item) => item.isChecked);
+
   final tabList = ['전체', '스태츄', '피규어', '인형', '액세서리', '의류'];
   var _selectIndex = 0;
 
@@ -39,5 +45,32 @@ class ShoppingController extends GetxController {
     CartDatabase databaseClient = CartDatabase();
     _cartCount.value = await databaseClient.fetchCartCount();
     Get.log('count: ${_cartCount.value}');
+  }
+
+  void fetchCartItems() async {
+    CartDatabase databaseClient = CartDatabase();
+    _cartItems.assignAll(await databaseClient.fetchCartItems());
+    for (var item in _cartItems) {
+      Get.log('${item.name} / ${item.isChecked}');
+    }
+  }
+
+  void updateItemCheck(CartItem item) async {
+    try {
+      CartDatabase databaseClient = CartDatabase();
+      final result = await databaseClient.updateCartItem(item);
+      final index = _cartItems.indexWhere((e) => e.idx == item.idx);
+      _cartItems[index] = result;
+    } catch(e) {
+      Get.log(e.toString());
+    }
+  }
+
+  void updateAllCheck(bool value) async {
+    CartDatabase databaseClient = CartDatabase();
+    final newList = await databaseClient.updateCartItemAll(value);
+
+    _cartItems.clear();
+    _cartItems.assignAll(newList);
   }
 }

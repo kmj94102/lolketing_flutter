@@ -50,11 +50,12 @@ class CartItem {
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
+      idx: json['idx'],
       category: json['category'],
       name: json['name'],
       price: json['price'],
       amount: json['amount'],
-      isChecked: json['isChecked'],
+      isChecked: json['isChecked'] == 1,
       image: json['image'],
       goodsId: json['goodsId'],
     );
@@ -62,6 +63,7 @@ class CartItem {
 
   Map<String, dynamic> toJson() {
     return {
+      'idx': idx,
       'category': category,
       'name': name,
       'price': price,

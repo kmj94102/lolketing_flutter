@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:lolketing_flutter/ui/shopping/cart.dart';
 
 import '../../style/color.dart';
 import '../../util/common.dart';
 
 Widget buildCartIcon(int cartCount) {
   return GestureDetector(
-    onTap: () {},
+    onTap: () {
+      Get.to(const CartScreen());
+    },
     child: Stack(
       children: [
         SvgPicture.asset(
