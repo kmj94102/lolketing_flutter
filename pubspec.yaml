@@ -38,6 +38,7 @@ dependencies:
   path:
   smooth_page_indicator:
   rxdart:
+  home_widget:
 
 
   # The following adds the Cupertino Icons font to your application.

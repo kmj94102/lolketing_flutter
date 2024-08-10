@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/route_manager.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:lolketing_flutter/structure/base_container.dart';
 import 'package:lolketing_flutter/ui/event/event.dart';
 import 'package:lolketing_flutter/ui/my_page/my_page.dart';
@@ -17,6 +18,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  // int _counter = 0;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   HomeWidget.widgetClicked.listen((Uri? uri) => loadData());
+  //   loadData();
+  // }
+  //
+  // void loadData() async {
+  //   await HomeWidget.getWidgetData<int>('_counter', defaultValue: 0)
+  //       .then((int? value) => _counter = value ?? 0);
+  //   setState(() {});
+  // }
+  //
+  // Future<void> updateAppWidget() async {
+  //   await HomeWidget.saveWidgetData('_counter', _counter);
+  //   await HomeWidget.updateWidget(name: 'AppWidgetProvider', iOSName: 'AppWidgetProvider');
+  // }
+  //
+  // void _incrementCounter() {
+  //   setState(() => _counter++);
+  //   updateAppWidget();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return BaseContainer(
